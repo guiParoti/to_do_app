@@ -1,8 +1,26 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from datetime import datetime
 import database
 
 app = Flask(__name__)
+
+@app.route('/')
+def home():
+    hora = datetime.now().hour
+    if hora < 12:
+        saudacoes = "Bom dia!"
+    elif hora < 18:
+        saudacoes = "Boa tarde!"
+    else:
+        saudacoes = "Boa noite!"
+    return f"""
+        <h1>{saudacoes} API funcionando!</h1>
+        <p>Use /tarefas pra visualizar todas as tarefas</p>
+        <h1>Ou</h1>
+        <p>Use /tarefas/titulo da tarefa pra visualizar uma tarefa especifica
+        """, 200
+
 
 @app.route('/tarefas', methods=['GET'])
 def pegar_tarefas():
