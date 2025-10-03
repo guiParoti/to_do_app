@@ -1,18 +1,52 @@
 <script>
-/* import axios from 'axios'; */
+import axios from 'axios'; 
 export default{
     name: 'App',
     data(){
         return {
-            tarefas: []
+            tarefas: [],
+            title: '',
+            description: ''
         }
     },
 
     mounted(){
-
+        this.getTarefas();
     },
 
     methods:{
+        async getTarefas(){
+            try{
+                const resposta = await axios.get('http://127.0.0.1:5000/tarefas');
+                this.tarefas = resposta.data.tarefas;
+                console.log(this.tarefas);
+            }catch(error){
+                console.error('Falha ao pegar as tarefas', error);
+            }
+        },
+
+        async salvarTarefas(){
+                try {
+                    await axios.post('http://127.0.0.1:5000/tarefas', {
+                        title: this.title,
+                        description: this.description
+                    });
+                    this.getTarefas();
+                    this.title = '';
+                    this.description = '';
+                }catch(error){
+                    console.log('Erro ao salvar tarefa', error);
+                }
+        },
+
+        async deletarTarefas(titulo){
+            try{
+                await axios.delete(`http://127.0.0.1:5000/tarefas/${titulo}`)
+                this.getTarefas()
+                }catch(error){
+                    console.error('erro ao deletar tarefa', error)
+            }
+        }
 
     }
 }
@@ -23,20 +57,27 @@ export default{
 <template>
     <div id="conteiner">
         <div>
-            <form>
+            <form @submit.prevent="salvarTarefas">
                
                 <label>Insira o titulo da tarefa:</label>
-                <input type="text" id="tarefa" required="true"></input>
+                <input type="text" v-model="title" required/>
                 <br>
-
-                
                 <label>Insira a descrição da Tarefa:</label>
-                <input type="text" id="descTarefa" placeholder="Opcional"></input>
+                <input type="text" v-model="description" placeholder="Opcional"/>
                 <br>
-                
                 <button id="btn" type="submit">Salvar tarefa</button>
             </form>
         </div>
+        
+    <div class="lista-tarefas">
+        <div v-for="(tarefa, index) in tarefas" :key="index" class="tarefa-item">
+            <div>
+                <div class="tarefa-titulo">{{ tarefa.title}}</div>
+                <div class="tarefa-desc">{{ tarefa.description }}</div>
+            </div>
+                <button @click="deletarTarefas(tarefa.title)">❌</button>
+        </div>
+    </div>
     </div>
 </template>
 

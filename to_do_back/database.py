@@ -10,11 +10,12 @@ def pegar_todas_tarefas():
 def pegar_tarefa(titulo_tarefa):
     return colecao_tarefas.find_one({'title': titulo_tarefa}, {'_id': 0})
 
-def adicionar_nova_tarefa(titulo_tarefa):
-    colecao_tarefas.insert_one({'title': titulo_tarefa})
+def adicionar_nova_tarefa(titulo_tarefa, descricao_tarefa):
+    colecao_tarefas.insert_one({'title': titulo_tarefa, 'description': descricao_tarefa})
+    return {'title': titulo_tarefa, 'description': descricao_tarefa}
 
 def atualizar_tarefa(titulo_tarefa, data):
-    resultado = colecao_tarefas.update_one({'title': titulo_tarefa}, {'$set': {data}})
+    resultado = colecao_tarefas.update_one({'title': titulo_tarefa}, {'$set': data})
     if resultado.matched_count:
         return pegar_tarefa(titulo_tarefa)
     return None
