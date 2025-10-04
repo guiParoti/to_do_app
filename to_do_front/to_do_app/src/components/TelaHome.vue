@@ -89,7 +89,8 @@
                     <div class="tarefa-titulo">{{ tarefa.title}}</div>
                     <div class="tarefa-desc">{{ tarefa.description }}</div>
                 </div>
-                    <button @click="marcarFeito(tarefa)">{{tarefa.done ? '✔️': '⌛'}}</button>
+                    <button @click="marcarFeito(tarefa)">{{tarefa.done ? '✔️': '⌛'}}</button> <!--Usando operador ternario eu decido o emoji, se estiver feita(true) o emoji de feito
+                    é atribuido ao texto do botão, se não estiver concluida(false) o emoji do relogio é atribuido ao texto botão-->
             </div>
             </div>
         </div>
@@ -97,8 +98,9 @@
     </template>
 
     <style scoped>
-    /*Sim, esse css teve chatgpt*/
 
+    /*Sim, esse css teve chatgpt*/
+    
    /* =========================
    Container principal
    ========================= */
